@@ -1,0 +1,28 @@
+{
+  "Country": [
+    {
+      "id": 1,
+      "country": "India",
+      "city": "Telangana",
+      "population": 130000000
+    },
+    {
+      "id": 2,
+      "country": "Singapore",
+      "city": "Telangana",
+      "population": 130000000
+    },
+    {
+      "id": 4,
+      "country": "USA",
+      "city": "Newyork",
+      "population": 325322342
+    },
+    {
+      "id": 5,
+      "country": "Nepal",
+      "city": "Bhutan",
+      "population": 345345
+    }
+  ]
+}
