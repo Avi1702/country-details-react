@@ -32,6 +32,7 @@ export const Home = () => {
     const [city,setCity]=React.useState("")
      const [population,setPopulation]=React.useState(0)
      const [length,setLength]=React.useState(0)
+     const [type,setType]=React.useState("")
 
 
     const Initial_fetch=()=>{
@@ -45,7 +46,7 @@ export const Home = () => {
 
     React.useEffect(()=>{
         Initial_fetch()
-    },[])
+    },[type])
 
     const handleDelete=(id)=>{
         console.log(id)
@@ -61,12 +62,18 @@ export const Home = () => {
    
    
 
-    const handleClickOpen = (e,id) => {
+    const handleClickOpen = (e,id,country,city,population) => {
+      // console.log(e.target.innerText)
         if(e.target.value==="addCity"){
             setId(id)
+            setType(e.target.innerText)
         }
         else{
+            setType(e.target.innerText)
             setId(id)
+            setCountry(country)
+            setCity(city)
+            setPopulation(population)
         }
       setOpen(true);
     };
@@ -77,25 +84,33 @@ export const Home = () => {
 
     const handleSubmit=()=>{
         // console.log(e.target.innerText)
-      console.log(id,country,city,population)
+      console.log(type)
+      if(type==="ADD CITY"){
             axios.post("http://localhost:3002/Country",{id,country,city,population}) 
           .then((res)=>{console.log(res)})
           .catch(err=>{console.log(err)})
+      }
+      else if(type==="EDIT"){
+        console.log("hi")
+        axios({
+          method:"patch",
+          url:`http://localhost:3002/Country/${id}`,
+       
+          data:{
+            id,
+            country,
+            city,
+            population
+          }
+      // })
+        })
+  
+      }
         // console.log(id)
         // console.log(country,city,population)
 
         // else{
-        // axios({
-        //     method:"patch",
-        //     url:`http://localhost:3002/Country/${id}`,
-         
-        //     body:{
-        //       country,
-        //       city,
-        //       population
-        //     }
-        // })
-    
+      
 
         Initial_fetch()
         handleClose()
@@ -127,7 +142,7 @@ export const Home = () => {
               </TableCell>
               <TableCell align="right">{ele.city}</TableCell>
               <TableCell align="right">{ele.population}</TableCell>
-              <TableCell align="right"><Button onClick={(e)=>handleClickOpen(e,ele.id)}>Edit</Button></TableCell>
+              <TableCell align="right"><Button onClick={(e)=>handleClickOpen(e,ele.id,ele.country,ele.city,ele.population)}>Edit</Button></TableCell>
               <TableCell align="right"><Button onClick={()=>{handleDelete(ele.id)}}>Delete</Button></TableCell>
             </TableRow>
           ))}
@@ -144,7 +159,7 @@ export const Home = () => {
       noValidate
       autoComplete="off"
     >
-      <TextField id="outlined-basic" label="Country" variant="outlined" onChange={(e)=>{setCountry(e.target.value)}}/>
+      <TextField id="outlined-basic" label="Country" variant="outlined" value={country} onChange={(e)=>{setCountry(e.target.value)}}/>
     </Box>
     <Box
       component="form"
@@ -154,7 +169,7 @@ export const Home = () => {
       noValidate
       autoComplete="off"
     >
-      <TextField id="outlined-basic" label="City" variant="outlined" onChange={(e)=>{setCity(e.target.value)}}/>
+      <TextField id="outlined-basic" label="City" variant="outlined" value={city} onChange={(e)=>{setCity(e.target.value)}}/>
     </Box>
     <Box
       component="form"
@@ -164,12 +179,12 @@ export const Home = () => {
       noValidate
       autoComplete="off"
     >
-      <TextField id="outlined-basic" label="Population" variant="outlined" onChange={(e)=>{setPopulation(e.target.value)}} />
+      <TextField id="outlined-basic" label="Population" variant="outlined" onChange={(e)=>{setPopulation(e.target.value)}} value={population} />
     </Box>
 
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleSubmit}>Submit</Button>
+          <Button onClick={(e)=>{handleSubmit(e)}}>Submit</Button>
         </DialogActions>
       </Dialog>
       
